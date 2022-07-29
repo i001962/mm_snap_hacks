@@ -6,7 +6,7 @@
   </head>
 
   <body>
-    <h1>Hello, Snaps!</h1>
+    <h1>Address Book MetaMask Snap Example!</h1>
     <details>
       <summary>Instructions</summary>
       <ul>
@@ -42,7 +42,20 @@
       <p>My address book</p>
       <pre id="addressBook"></pre>
     </div>
-  </body>
+
+    <h1>Ipfs MetaMask Snap Example!</h1>
+    <br/>
+    <p>
+      <input class="toAdd" placeholder="String to upload"></input>
+      <button class="add">Add</button>
+      <span class="addOutput"></span>
+    </p>
+
+    <p>
+      <input class="toGet" placeholder="IPFS content's hash"></input>
+      <button class="get">Get</button>
+      <span class="getOutput"></span>
+    </p>
   </body>
 
   <script>
@@ -125,6 +138,50 @@
       alert('Problem happened: ' + err.message || err)
    }
 }
+
+const toAdd = document.querySelector('input.toAdd')
+const addButton = document.querySelector('button.add')
+const addOutput = document.querySelector('span.addOutput')
+
+const toGet = document.querySelector('input.toGet')
+const getButtonIpfs = document.querySelector('button.get')
+const getOutput = document.querySelector('span.getOutput')
+
+connectButton.addEventListener('click', connect)
+addButton.addEventListener('click', add)
+getButtonIpfs.addEventListener('click', get)
+async function add () {
+      try {
+        const response = await ethereum.request({
+          method: 'wallet_invokeSnap',
+          params: [snapId, {
+            method: 'add',
+            params: [ toAdd.value ],
+          }]
+        })
+        addOutput.innerText = response
+      } catch (err) {
+        console.error(err)
+        addOutput.innerText = `Problem getting: ${JSON.stringify(err)}`
+      }
+    }
+
+    async function get () {
+      try {
+        const response = await ethereum.request({
+          method: 'wallet_invokeSnap',
+          params: [snapId, {
+            method: 'cat',
+            params: [ toGet.value ],
+          }]
+        })
+        getOutput.innerText = response
+      } catch (err) {
+        console.error(err)
+        getOutput.innerText = `Problem getting: ${JSON.stringify(err)}`
+      }
+    }
+
 </script>
   </script>
 </html>
